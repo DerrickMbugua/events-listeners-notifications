@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Events\NewUserEvent;
 use App\Models\User;
 use App\Notifications\WelcomeEmailNotification;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +35,8 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        $user->notify(new WelcomeEmailNotification());
+        //send email event
+        event(new NewUserEvent($user));
 
         return $user;
     }
